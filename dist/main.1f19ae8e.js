@@ -87811,7 +87811,9 @@ var _source = require("ol/source.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var layerList = [];
+document.getElementById("searchButton").onclick = executeQuery;
+var queryValue = 5;
+var queryExtent;
 var dragAndDropStyles = {
   'Point': new _style.Style({
     image: new _style.Circle({
@@ -87868,15 +87870,80 @@ var dragAndDropStyles = {
     })
   })
 };
+var queryStyles = {
+  'Point': new _style.Style({
+    image: new _style.Circle({
+      fill: new _style.Fill({
+        color: 'rgba(255,255,0,0.5)'
+      }),
+      radius: 5,
+      stroke: new _style.Stroke({
+        color: '#fff',
+        width: 1
+      })
+    })
+  }),
+  'LineString': new _style.Style({
+    stroke: new _style.Stroke({
+      color: '#fff',
+      width: 3
+    })
+  }),
+  'Polygon': new _style.Style({
+    fill: new _style.Fill({
+      color: 'rgba(0,255,255,0.5)'
+    }),
+    stroke: new _style.Stroke({
+      color: '#fff',
+      width: 1
+    })
+  }),
+  'MultiPoint': new _style.Style({
+    image: new _style.Circle({
+      fill: new _style.Fill({
+        color: 'rgba(255,0,255,0.5)'
+      }),
+      radius: 5,
+      stroke: new _style.Stroke({
+        color: '#fff',
+        width: 1
+      })
+    })
+  }),
+  'MultiLineString': new _style.Style({
+    stroke: new _style.Stroke({
+      color: '#fff',
+      width: 3
+    })
+  }),
+  'MultiPolygon': new _style.Style({
+    fill: new _style.Fill({
+      color: 'rgba(0,0,255,0.5)'
+    }),
+    stroke: new _style.Stroke({
+      color: '#fff',
+      width: 1
+    })
+  })
+};
 
 var dndStyleFunction = function dndStyleFunction(feature, resolution) {
-  var featureStyleFunction = feature.getStyleFunction();
+  return dragAndDropStyles[feature.getGeometry().getType()];
+};
 
-  if (featureStyleFunction) {
-    return featureStyleFunction.call(feature, resolution);
-  } else {
-    return dragAndDropStyles[feature.getGeometry().getType()];
+var queryStyleFunction = function queryStyleFunction(feature, resolution) {
+  console.log("query style called!");
+
+  if (queryValue) {
+    var objId = feature.get("id");
+
+    if (objId == queryValue) {
+      queryExtent = feature["values_"].geometry["extent_"];
+      return queryStyles[feature.getGeometry().getType()];
+    }
   }
+
+  return dragAndDropStyles[feature.getGeometry().getType()];
 };
 
 var dragAndDropInteraction = new _interaction.DragAndDrop({
@@ -87898,7 +87965,6 @@ var map = new _ol2.Map({
   })
 });
 dragAndDropInteraction.on('addfeatures', function (event) {
-  // console.log(event.file.name);
   var layerName = event.file.name;
   var vectorSource = new _source.Vector({
     features: event.features
@@ -87908,8 +87974,6 @@ dragAndDropInteraction.on('addfeatures', function (event) {
     style: dndStyleFunction,
     title: layerName
   }));
-  layerList.push(layerName);
-  console.log(layerList);
   addOption(layerName);
   map.getView().fit(vectorSource.getExtent());
 });
@@ -87920,6 +87984,19 @@ function addOption(layerName) {
   option.value = layerName;
   option.innerText = layerName;
   query.appendChild(option);
+}
+
+function executeQuery() {
+  var query = document.getElementById("query");
+  queryValue = document.getElementById("objId").value;
+  map.getLayers().forEach(function (layer) {
+    if (layer.get('title') == query.value) {
+      console.log("Query Executed!");
+      layer.setStyle(queryStyleFunction);
+    } else if (layer.type != "TILE") {
+      layer.setStyle(dndStyleFunction);
+    }
+  });
 }
 },{"ol/ol.css":"node_modules/ol/ol.css","ol":"node_modules/ol/index.js","ol/layer.js":"node_modules/ol/layer.js","ol/source/BingMaps.js":"node_modules/ol/source/BingMaps.js","ol/style.js":"node_modules/ol/style.js","ol/format.js":"node_modules/ol/format.js","ol/interaction.js":"node_modules/ol/interaction.js","ol/source.js":"node_modules/ol/source.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -87948,7 +88025,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "2925" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "6097" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

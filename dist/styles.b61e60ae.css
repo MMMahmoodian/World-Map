@@ -1,0 +1,80 @@
+#queryBox {
+	font: 95% Arial, Helvetica, sans-serif;
+	margin: 10px auto;
+	padding: 16px;
+    background: #F7F7F7;
+    position: fixed;
+    right: 25px;
+    bottom: 10px;
+    width: 250px;
+    height: 130px;
+    border-radius: 2px;
+}
+
+#queryBox input[type="text"],
+#queryBox input[type="date"],
+#queryBox input[type="datetime"],
+#queryBox input[type="email"],
+#queryBox input[type="number"],
+#queryBox input[type="search"],
+#queryBox input[type="time"],
+#queryBox input[type="url"],
+#queryBox textarea,
+#queryBox select 
+{
+	-webkit-transition: all 0.30s ease-in-out;
+	-moz-transition: all 0.30s ease-in-out;
+	-ms-transition: all 0.30s ease-in-out;
+	-o-transition: all 0.30s ease-in-out;
+	outline: none;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	width: 100%;
+	background: #fff;
+	margin-bottom: 4%;
+	border: 1px solid #ccc;
+	padding: 3%;
+	color: #555;
+    font: 95% Arial, Helvetica, sans-serif;
+    height: 40px;
+}
+#queryBox input[type="text"]:focus,
+#queryBox input[type="date"]:focus,
+#queryBox input[type="datetime"]:focus,
+#queryBox input[type="email"]:focus,
+#queryBox input[type="number"]:focus,
+#queryBox input[type="search"]:focus,
+#queryBox input[type="time"]:focus,
+#queryBox input[type="url"]:focus,
+#queryBox textarea:focus,
+#queryBox select:focus
+{
+	box-shadow: 0 0 5px #43D1AF;
+	padding: 3%;
+	border: 1px solid #43D1AF;
+}
+
+#queryBox input[type="submit"],
+#queryBox input[type="button"]{
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	width: 100%;
+	padding: 3%;
+	background: #43D1AF;
+	border-bottom: 2px solid #30C29E;
+	border-top-style: none;
+	border-right-style: none;
+	border-left-style: none;	
+	color: #fff;
+}
+#queryBox input[type="submit"]:hover,
+#queryBox input[type="button"]:hover{
+	background: #2EBC99;
+}
+
+.ol-zoom-out ,.ol-zoom-in{
+    background: #F7F7F7 !important;
+    color: gray !important;
+}
