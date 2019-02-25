@@ -9,6 +9,11 @@ import { Vector as VectorSource } from 'ol/source.js';
 
 
 document.getElementById("searchButton").onclick = executeQuery;
+document.getElementById("objId").addEventListener("keydown",function(e){
+    if(e.keyCode == 13){
+        executeQuery();
+    }
+});
 var queryValue = 5;
 var queryExtent;
 
@@ -21,7 +26,63 @@ var dragAndDropStyles = {
             }),
             radius: 5,
             stroke: new Stroke({
-                color: '#ff0',
+                color: '#fff',
+                width: 1
+            })
+        })
+    }),
+    'LineString': new Style({
+        stroke: new Stroke({
+            color: '#00f',
+            width: 3
+        })
+    }),
+    'Polygon': new Style({
+        fill: new Fill({
+            color: 'rgba(255,255,0,0.5)'
+        }),
+        stroke: new Stroke({
+            color: '#fff',
+            width: 1
+        })
+    }),
+    'MultiPoint': new Style({
+        image: new CircleStyle({
+            fill: new Fill({
+                color: 'rgba(255,255,0,0.5)'
+            }),
+            radius: 5,
+            stroke: new Stroke({
+                color: '#fff',
+                width: 1
+            })
+        })
+    }),
+    'MultiLineString': new Style({
+        stroke: new Stroke({
+            color: '#00f',
+            width: 3
+        })
+    }),
+    'MultiPolygon': new Style({
+        fill: new Fill({
+            color: 'rgba(255,255,0,0.5)'
+        }),
+        stroke: new Stroke({
+            color: '#fff',
+            width: 1
+        })
+    })
+};
+var queryStyles = {
+    'Point': new Style({
+        image: new CircleStyle({
+            fill: new Fill({
+                color: 'rgba(255,0,0,0.5)'
+            }),
+            radius: 5,
+            stroke: new Stroke({
+                color: '#fff',
                 width: 1
             })
         })
@@ -34,63 +95,7 @@ var dragAndDropStyles = {
     }),
     'Polygon': new Style({
         fill: new Fill({
-            color: 'rgba(0,255,255,0.5)'
-        }),
-        stroke: new Stroke({
-            color: '#0ff',
-            width: 1
-        })
-    }),
-    'MultiPoint': new Style({
-        image: new CircleStyle({
-            fill: new Fill({
-                color: 'rgba(255,0,255,0.5)'
-            }),
-            radius: 5,
-            stroke: new Stroke({
-                color: '#f0f',
-                width: 1
-            })
-        })
-    }),
-    'MultiLineString': new Style({
-        stroke: new Stroke({
-            color: '#0f0',
-            width: 3
-        })
-    }),
-    'MultiPolygon': new Style({
-        fill: new Fill({
-            color: 'rgba(0,0,255,0.5)'
-        }),
-        stroke: new Stroke({
-            color: '#00f',
-            width: 1
-        })
-    })
-};
-var queryStyles = {
-    'Point': new Style({
-        image: new CircleStyle({
-            fill: new Fill({
-                color: 'rgba(255,255,0,0.5)'
-            }),
-            radius: 5,
-            stroke: new Stroke({
-                color: '#fff',
-                width: 1
-            })
-        })
-    }),
-    'LineString': new Style({
-        stroke: new Stroke({
-            color: '#fff',
-            width: 3
-        })
-    }),
-    'Polygon': new Style({
-        fill: new Fill({
-            color: 'rgba(0,255,255,0.5)'
+            color: 'rgba(255,0,0,0.5)'
         }),
         stroke: new Stroke({
             color: '#fff',
@@ -100,7 +105,7 @@ var queryStyles = {
     'MultiPoint': new Style({
         image: new CircleStyle({
             fill: new Fill({
-                color: 'rgba(255,0,255,0.5)'
+                color: 'rgba(255,0,0,0.5)'
             }),
             radius: 5,
             stroke: new Stroke({
@@ -111,13 +116,13 @@ var queryStyles = {
     }),
     'MultiLineString': new Style({
         stroke: new Stroke({
-            color: '#fff',
+            color: '#f00',
             width: 3
         })
     }),
     'MultiPolygon': new Style({
         fill: new Fill({
-            color: 'rgba(0,0,255,0.5)'
+            color: 'rgba(255,0,0,0.5)'
         }),
         stroke: new Stroke({
             color: '#fff',
@@ -198,7 +203,8 @@ function executeQuery() {
         if (layer.get('title') == query.value) {
             console.log("Query Executed!");
             layer.setStyle(queryStyleFunction);
-            
+            // console.log(layer);
+            map.getView().fit(layer.getSource().getExtent());
         } else if (layer.type != "TILE") {
             layer.setStyle(dndStyleFunction);
         }
