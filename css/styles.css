@@ -78,3 +78,7 @@
     background: #F7F7F7 !important;
     color: gray !important;
 }
+
+.ol-attribution {
+    display: none;
+}
