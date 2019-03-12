@@ -9,7 +9,7 @@ import { Vector as VectorSource } from 'ol/source.js';
 
 
 document.getElementById("searchButton").onclick = executeQuery;
-document.getElementById("objId").addEventListener("keydown",function(e){
+document.getElementById("gridcode").addEventListener("keydown",function(e){
     if(e.keyCode == 13){
         executeQuery();
     }
@@ -131,8 +131,8 @@ var dndStyleFunction = function (feature, resolution) {
 var queryStyleFunction = function (feature, resolution) {
     console.log("query style called!");
     if (queryValue) {
-        var objId = feature.get("id");
-        if (objId == queryValue) {
+        var grid_code = feature.get("GRID_CODE");
+        if (grid_code == queryValue) {
             queryExtent = feature["values_"].geometry["extent_"];
             return queryStyles[feature.getGeometry().getType()];
         }
@@ -192,7 +192,7 @@ function addOption(layerName) {
 function executeQuery() {
 
     var query = document.getElementById("query");
-    queryValue = document.getElementById("objId").value;
+    queryValue = document.getElementById("gridcode").value;
     map.getLayers().forEach(function (layer) {
         if (layer.get('title') == query.value) {
             console.log("Query Executed!");
