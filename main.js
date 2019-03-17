@@ -2,7 +2,7 @@ import 'ol/ol.css';
 import { Map, View } from 'ol';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer.js';
 import BingMaps from 'ol/source/BingMaps.js';
-import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style.js';
+import { Circle as CircleStyle, Fill, Stroke, Style, Text } from 'ol/style.js';
 import { GPX, GeoJSON, IGC, KML, TopoJSON } from 'ol/format.js';
 import { defaults as defaultInteractions, DragAndDrop } from 'ol/interaction.js';
 import { Vector as VectorSource } from 'ol/source.js';
@@ -126,7 +126,11 @@ var queryStyles = {
 };
 
 var dndStyleFunction = function (feature, resolution) {
-    return dragAndDropStyles[feature.getGeometry().getType()];
+    var style = dragAndDropStyles[feature.getGeometry().getType()];
+    style.setText(new Text({
+        text: getLabel(feature, resolution)
+    }));
+    return style;
 };
 var queryStyleFunction = function (feature, resolution) {
     console.log("query style called!");
@@ -139,6 +143,11 @@ var queryStyleFunction = function (feature, resolution) {
     }
     return dragAndDropStyles[feature.getGeometry().getType()];
 
+};
+
+var getLabel = function (feature, resolution) {
+    var text = String(feature.get("GRID_CODE"))
+    return text;
 };
 
 var dragAndDropInteraction = new DragAndDrop({
