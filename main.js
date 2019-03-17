@@ -9,8 +9,8 @@ import { Vector as VectorSource } from 'ol/source.js';
 
 
 document.getElementById("searchButton").onclick = executeQuery;
-document.getElementById("gridcode").addEventListener("keydown",function(e){
-    if(e.keyCode == 13){
+document.getElementById("gridcode").addEventListener("keydown", function (e) {
+    if (e.keyCode == 13) {
         executeQuery();
     }
 });
@@ -180,12 +180,13 @@ dragAndDropInteraction.on('addfeatures', function (event) {
     var vectorSource = new VectorSource({
         features: event.features
     });
-
-    map.addLayer(new VectorLayer({
+    var layer = new VectorLayer({
         source: vectorSource,
         style: dndStyleFunction,
         title: layerName
-    }));
+    });
+    map.addLayer(layer);
+    addLayer(layer);
     addOption(layerName);
     map.getView().fit(vectorSource.getExtent());
 });
@@ -212,5 +213,38 @@ function executeQuery() {
             layer.setStyle(dndStyleFunction);
         }
     });
-    
+
 }
+
+
+
+var LayerListUl = document.getElementById("layerlistul");
+function addLayer(layer) {
+    var title = layer.get('title');
+    var li = document.createElement("li");
+    var div = document.createElement("div");
+    div.setAttribute("class", "material-switch pull-right");
+
+    var input = document.createElement("input");
+    input.setAttribute("type", "checkbox");
+    input.setAttribute("id", title);
+    input.setAttribute("name", title);
+    input.checked = true;
+    var label = document.createElement("label");
+    label.setAttribute("for", title);
+    label.setAttribute("class", "label-success");
+    li.appendChild(document.createTextNode(title));
+    div.appendChild(input);
+    div.appendChild(label);
+
+    li.appendChild(div);
+    li.setAttribute("class", "list-group-item");
+    LayerListUl.appendChild(li);
+
+    input.addEventListener('change', function () {
+        // layer.visible = this.checked;
+        layer.set('visible', this.checked);
+    });
+
+
+};

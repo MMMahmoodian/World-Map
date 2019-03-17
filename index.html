@@ -4,17 +4,30 @@
 <head>
     <meta charset="utf-8">
     <title>Using Parcel with OpenLayers</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <link href="css/styles.css" rel="stylesheet" type="text/css">
     <style>
         html body #map {
             width: 100%;
             height: 100%;
+            overflow: hidden;
         }
-        
     </style>
 </head>
 
 <body>
+    <div id="ToolBox">
+        <button id="LayerListToggle" class="btn btn-primary" type="button">Layer List</button>
+    </div>
+    <div id="LayerListPopup" class="popup">
+        <div class="popup-content">
+            <button class="close" id="CloseLayerList">&times;</button>
+            <p>Toggle Layers</p>
+            <ul class="layerlist-group" id="layerlistul" style="padding-left: 0px;">
+            </ul>
+        </div>
+    </div>
     <div id="map"></div>
     <div id="queryBox">
         <select name="query" id="query">
@@ -22,9 +35,10 @@
         </select>
         <input type="text" name="gridcode" id="gridcode" placeholder="Enter ID">
         <input type="button" value="Search" id="searchButton" onclick="doSth()">
-        
+
     </div>
     <script src="main.js"></script>
+    <script src="js/layerlist.js"></script>
 </body>
 
 </html>
