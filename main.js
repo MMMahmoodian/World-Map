@@ -74,7 +74,7 @@ var queryStyles = {
             fill: new Fill({
                 color: 'rgba(255,0,0,0.5)'
             }),
-            radius: 5,
+            radius: 10,
             stroke: new Stroke({
                 color: '#fff',
                 width: 1
@@ -84,12 +84,12 @@ var queryStyles = {
     'LineString': new Style({
         stroke: new Stroke({
             color: '#f00',
-            width: 3
+            width: 5
         })
     }),
     'Polygon': new Style({
         fill: new Fill({
-            color: 'rgba(255,0,0,0.5)'
+            color: 'rgba(255,0,0,0.2)'
         }),
         stroke: new Stroke({
             color: '#fff',
@@ -101,7 +101,7 @@ var queryStyles = {
             fill: new Fill({
                 color: 'rgba(255,0,0,0.5)'
             }),
-            radius: 5,
+            radius: 10,
             stroke: new Stroke({
                 color: '#fff',
                 width: 1
@@ -111,12 +111,12 @@ var queryStyles = {
     'MultiLineString': new Style({
         stroke: new Stroke({
             color: '#f00',
-            width: 3
+            width: 5
         })
     }),
     'MultiPolygon': new Style({
         fill: new Fill({
-            color: 'rgba(255,0,0,0.5)'
+            color: 'rgba(255,0,0,0.2)'
         }),
         stroke: new Stroke({
             color: '#fff',
@@ -133,15 +133,20 @@ var dndStyleFunction = function (feature, resolution) {
     return style;
 };
 var queryStyleFunction = function (feature, resolution) {
+    var style = dragAndDropStyles[feature.getGeometry().getType()];
     console.log("query style called!");
     if (queryValue) {
         var grid_code = feature.get("GRID_CODE");
         if (grid_code == queryValue) {
             queryExtent = feature["values_"].geometry["extent_"];
-            return queryStyles[feature.getGeometry().getType()];
+            style = queryStyles[feature.getGeometry().getType()];
         }
     }
-    return dragAndDropStyles[feature.getGeometry().getType()];
+    
+    style.setText(new Text({
+        text: getLabel(feature, resolution)
+    }));
+    return style;
 
 };
 
