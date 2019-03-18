@@ -126,14 +126,18 @@ var queryStyles = {
 };
 
 var dndStyleFunction = function (feature, resolution) {
-    var style = dragAndDropStyles[feature.getGeometry().getType()];
-    style.setText(new Text({
-        text: getLabel(feature, resolution)
-    }));
+    var geometry = feature.getGeometry().getType();
+    var style = dragAndDropStyles[geometry];
+    if(geometry == "Polygon" || geometry == "MultiPolygon"){
+        style.setText(new Text({
+            text: getLabel(feature, resolution)
+        }));
+    }
     return style;
 };
 var queryStyleFunction = function (feature, resolution) {
-    var style = dragAndDropStyles[feature.getGeometry().getType()];
+    var geometry = feature.getGeometry().getType();
+    var style = dragAndDropStyles[geometry];
     console.log("query style called!");
     if (queryValue) {
         var grid_code = feature.get("GRID_CODE");
@@ -142,10 +146,12 @@ var queryStyleFunction = function (feature, resolution) {
             style = queryStyles[feature.getGeometry().getType()];
         }
     }
+    if(geometry == "Polygon" || geometry == "MultiPolygon"){
+        style.setText(new Text({
+            text: getLabel(feature, resolution)
+        }));
+    }
     
-    style.setText(new Text({
-        text: getLabel(feature, resolution)
-    }));
     return style;
 
 };
