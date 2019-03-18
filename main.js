@@ -232,6 +232,11 @@ function executeQuery() {
 var LayerListUl = document.getElementById("layerlistul");
 function addLayer(layer) {
     var title = layer.get('title');
+    
+    if (title.length > 20){
+        title = title.substr(0,20) + "...";
+        console.log(title);
+    }
     var li = document.createElement("li");
     var div = document.createElement("div");
     div.setAttribute("class", "material-switch pull-right");
