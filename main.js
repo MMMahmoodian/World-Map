@@ -130,7 +130,10 @@ var dndStyleFunction = function (feature, resolution) {
     var style = dragAndDropStyles[geometry];
     if(geometry == "Polygon" || geometry == "MultiPolygon"){
         style.setText(new Text({
-            text: getLabel(feature, resolution)
+            text: getLabel(feature, resolution),
+            fill: new Fill({
+                color: '#000'
+            })
         }));
     }
     return style;
@@ -142,13 +145,19 @@ var queryStyleFunction = function (feature, resolution) {
     if (queryValue) {
         var grid_code = feature.get("GRID_CODE");
         if (grid_code == queryValue) {
-            queryExtent = feature["values_"].geometry["extent_"];
+            console.log(feature.getGeometry().getExtent());
+            map.getView().fit(feature.getGeometry().getExtent());
+            var currentZoom = map.getView().getZoom()
+            map.getView().setZoom(currentZoom - 1);
             style = queryStyles[feature.getGeometry().getType()];
         }
     }
     if(geometry == "Polygon" || geometry == "MultiPolygon"){
         style.setText(new Text({
-            text: getLabel(feature, resolution)
+            text: getLabel(feature, resolution),
+            fill: new Fill({
+                color: '#000'
+            })
         }));
     }
     
@@ -220,6 +229,7 @@ function executeQuery() {
             layer.setStyle(queryStyleFunction);
             // console.log(layer);
             map.getView().fit(layer.getSource().getExtent());
+            
         } else if (layer.type != "TILE") {
             layer.setStyle(dndStyleFunction);
         }
