@@ -14,8 +14,8 @@ document.getElementById("gridcode").addEventListener("keydown", function (e) {
         executeQuery();
     }
 });
-var queryValue = 5;
-var queryExtent;
+var queryValue;
+var executed = false;
 
 
 var dragAndDropStyles = {
@@ -128,12 +128,13 @@ var queryStyles = {
 var dndStyleFunction = function (feature, resolution) {
     var geometry = feature.getGeometry().getType();
     var style = dragAndDropStyles[geometry];
-    if(geometry == "Polygon" || geometry == "MultiPolygon"){
+    if (geometry == "Polygon" || geometry == "MultiPolygon") {
         style.setText(new Text({
             text: getLabel(feature, resolution),
             fill: new Fill({
                 color: '#000'
-            })
+            }),
+            font: '16px serif'
         }));
     }
     return style;
@@ -146,21 +147,25 @@ var queryStyleFunction = function (feature, resolution) {
         var grid_code = feature.get("GRID_CODE");
         if (grid_code == queryValue) {
             console.log(feature.getGeometry().getExtent());
-            map.getView().fit(feature.getGeometry().getExtent());
-            var currentZoom = map.getView().getZoom()
-            map.getView().setZoom(currentZoom - 1);
+            if (executed == false) {
+                map.getView().fit(feature.getGeometry().getExtent());
+                var currentZoom = map.getView().getZoom()
+                map.getView().setZoom(currentZoom - 1);
+                executed = true;
+            }
             style = queryStyles[feature.getGeometry().getType()];
         }
     }
-    if(geometry == "Polygon" || geometry == "MultiPolygon"){
+    if (geometry == "Polygon" || geometry == "MultiPolygon") {
         style.setText(new Text({
             text: getLabel(feature, resolution),
             fill: new Fill({
                 color: '#000'
-            })
+            }),
+            font: '16px serif'
         }));
     }
-    
+
     return style;
 
 };
@@ -220,7 +225,7 @@ function addOption(layerName) {
 }
 
 function executeQuery() {
-
+    executed = false;
     var query = document.getElementById("query");
     queryValue = document.getElementById("gridcode").value;
     map.getLayers().forEach(function (layer) {
@@ -229,7 +234,7 @@ function executeQuery() {
             layer.setStyle(queryStyleFunction);
             // console.log(layer);
             map.getView().fit(layer.getSource().getExtent());
-            
+
         } else if (layer.type != "TILE") {
             layer.setStyle(dndStyleFunction);
         }
@@ -242,9 +247,9 @@ function executeQuery() {
 var LayerListUl = document.getElementById("layerlistul");
 function addLayer(layer) {
     var title = layer.get('title');
-    
-    if (title.length > 20){
-        title = title.substr(0,20) + "...";
+
+    if (title.length > 20) {
+        title = title.substr(0, 20) + "...";
         console.log(title);
     }
     var li = document.createElement("li");
