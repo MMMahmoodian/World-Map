@@ -301,6 +301,7 @@ map.on('click', function (evt) {
         return feature;
     });
     if (feature) {
+        content.innerHTML = "";
         var gridCode = feature.get("GRID_CODE");
         console.log(feature.getKeys());
         var fieldNames = feature.getKeys();
