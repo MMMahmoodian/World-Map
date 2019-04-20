@@ -6,6 +6,21 @@ import { Circle as CircleStyle, Fill, Stroke, Style, Text } from 'ol/style.js';
 import { GPX, GeoJSON, IGC, KML, TopoJSON } from 'ol/format.js';
 import { defaults as defaultInteractions, DragAndDrop } from 'ol/interaction.js';
 import { Vector as VectorSource } from 'ol/source.js';
+import Overlay from 'ol/Overlay.js';
+
+
+
+var container = document.getElementById('popup');
+var content = document.getElementById('popup-content');
+var closer = document.getElementById('popup-closer');
+var overlay = new Overlay({
+    element: container,
+    autoPan: true,
+    autoPanAnimation: {
+        duration: 250
+    }
+});
+
 
 
 document.getElementById("searchButton").onclick = executeQuery;
@@ -193,6 +208,7 @@ const map = new Map({
             source: new BingMaps({ key: "AuZoV8yCqZQq3raQl6Wb-EHw1ssB4cgvs3sczPfg0fqrelVtOvGze1FwJvJ9Ooy0", imagerySet: 'Aerial' })
         })
     ],
+    overlays: [overlay],
     interactions: defaultInteractions().extend([dragAndDropInteraction]),
     view: new View({
         center: [0, 0],
@@ -278,4 +294,53 @@ function addLayer(layer) {
     });
 
 
+};
+
+map.on('click', function (evt) {
+    var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+        return feature;
+    });
+    if (feature) {
+        var gridCode = feature.get("GRID_CODE");
+        console.log(feature.getKeys());
+        var fieldNames = feature.getKeys();
+        var table = document.createElement("table");
+        table.innerHTML += "<table><tr><th>Field Name</th><th>Value</th></tr>";
+        // content.innerHTML = "<table><tr><th>Field Name</th><th>Value</th></tr>"
+        fieldNames.forEach(element => {
+            if (element != "geometry") {
+                var tr = document.createElement("tr");
+                var tableField = document.createElement("td");
+                tableField.innerHTML = element;
+                var tableValue = document.createElement("td");
+                tableValue.innerHTML = feature.get(element);
+                tr.appendChild(tableField);
+                tr.appendChild(tableValue)
+                console.log(element)
+                console.log(feature.get(element));
+                table.appendChild(tr);
+            }
+
+        });
+        // content.innerHTML += "</table>"
+        content.appendChild(table);
+        console.log(gridCode);
+        var coordinate = evt.coordinate;
+        overlay.setPosition(coordinate);
+    }
+
+});
+
+
+
+
+
+/**
+ * Add a click handler to hide the popup.
+ * @return {boolean} Don't follow the href.
+ */
+closer.onclick = function () {
+    overlay.setPosition(undefined);
+    closer.blur();
+    return false;
 };
